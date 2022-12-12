@@ -1,0 +1,1 @@
+from .sign_up_controller import sign_up_controller
