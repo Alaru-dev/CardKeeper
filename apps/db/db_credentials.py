@@ -1,4 +1,3 @@
-
 DB_LOGIN = "alaru"
 DB_PASSWORD = "Giv485rom"
 DB_PORT = "5432"

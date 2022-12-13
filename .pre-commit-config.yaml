@@ -1,16 +1,15 @@
 repos:
 -   repo: https://github.com/pre-commit/mirrors-isort
-    rev: 5.10.1
+    rev: v5.10.1
     hooks:
     - id: isort
 
 -   repo: https://github.com/psf/black
-    rev: stable
+    rev: 22.12.0
     hooks:
     - id: black
-      language_version: python3.10
 
--   repo: https://gitlab.com/pycqa/flake8
-    rev: 4.0.1.fla
+-   repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
     hooks:
     - id: flake8
