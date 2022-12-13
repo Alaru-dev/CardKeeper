@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from apps.projconf.proj_description import description
 
 app = FastAPI(
-    title="CardKepeerApi",
+    title="CardKeeperApi",
     description=description,
     version="1.0.0",
     contact={
