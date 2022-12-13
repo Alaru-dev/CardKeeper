@@ -6,4 +6,3 @@ class UserUpdateRequest(BaseModel):
     password: str
     new_username: str | None = None
     new_password: str | None = None
-

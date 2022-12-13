@@ -1,1 +1,3 @@
-StoragePath = '/home/alaru/Projects/pythonProject/pythonProject/pythonProject/fast_api/ex_storage/storage'
+import os
+
+StoragePath = os.getenv("STORAGE_PATH")
