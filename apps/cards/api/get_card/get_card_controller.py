@@ -1,41 +1,39 @@
-import os
-
-from fastapi import Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import Depends, File, HTTPException, status
+from fastapi.responses import FileResponse
 
 from apps.auth.api.security_settings import AuthJWT
 from apps.db import async_session
 from apps.projconf import app
 
-from ...db_card_func import StoragePath, db_add_card, db_get_card
+from ...db_card_func import db_get_card
 from ...db_models import Card
 from .get_card_request import GetCardRequest
 
 
 @app.get("/{user_id}/get_card/{card_name}")
 async def get_card_controller(
-    user_id, card_name, Authorize: AuthJWT = Depends()
+    user_id: int, card_name: str, Authorize: AuthJWT = Depends()
 ):
     Authorize.jwt_required()
     async with async_session() as session, session.begin():
         current_card: Card = await db_get_card(
-            session, Card, f"{user_id}{card_name}"
+            session,
+            Card,
+            user_id,
+            card_name,
         )
+        card_full_name = get_file_name(current_card.card_path)
         if current_card:
-            files_list = os.listdir(current_card.card_path)
-            card_path_without_ext = os.path.join(
-                current_card.card_path, current_card.card_name[1:]
+            # with open(current_card.card_path, "rb") as file_object:
+            return FileResponse(
+                current_card.card_path, filename=card_full_name
             )
-            full_file_name = [
-                file
-                for file in files_list
-                if current_card.card_name[1:] in file
-            ][0]
-            card_absolute_path = os.path.join(
-                current_card.card_path, full_file_name
-            )
-            with open(card_absolute_path, "rb") as file_object:
-                return file_object
         else:
             raise HTTPException(
                 status.HTTP_404_NOT_FOUND, detail="Card don`t exist"
             )
+
+
+def get_file_name(card_path):
+    position = card_path.rfind("/") + 1
+    return card_path[position:]
