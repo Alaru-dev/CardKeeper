@@ -13,10 +13,7 @@ async def db_add_user(session, user_table, user):
     created_user = session.add(
         user_table(username=user.username, password=user.password)
     )
-    exist_user = await session.scalar(
-        select(user_table).where(user_table.username == user.username)
-    )
-    return exist_user
+    return created_user
 
 
 async def db_update_user(session, user_table, user):
@@ -32,5 +29,4 @@ async def db_delete_user(session, user_table, user):
     current_user = await session.scalar(
         select(user_table).where(user_table.username == user.username)
     )
-    created_user = await session.delete(current_user)
-    return created_user
+    return await session.delete(current_user)

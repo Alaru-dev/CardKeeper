@@ -5,7 +5,7 @@ from fastapi_jwt_auth.exceptions import AuthJWTException
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from apps.projconf import app
+from projconf import app
 
 
 class Settings(BaseModel):

@@ -28,12 +28,10 @@ async def db_add_card(session, card_table, card, card_path):
             favorites=card.favorites,
         )
     )
-    exist_card = await session.scalar(
-        select(card_table).where(card_table.card_name == card.card_name)
-    )
-    return exist_card
+    return created_card
 
 
+# TODO: Remove commented code
 # async def db_update_card(session, card_table, user):
 #     updated_user = await session.execute(update(card_table).where(card_table.id == user.id).values(username=user.username, password=user.password))
 #     return updated_user

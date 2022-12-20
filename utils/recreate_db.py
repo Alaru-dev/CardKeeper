@@ -1,7 +1,7 @@
 import asyncio
 
-from apps.cards import Base, Card
-from apps.db.db_specify import engine
+from apps.db_models import Base
+from apps.utils.db_specify import engine
 
 
 async def recreate_db_force():
