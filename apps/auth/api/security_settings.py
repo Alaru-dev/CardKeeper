@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
@@ -6,10 +8,12 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 from projconf import app
+from projconf.settings import SECRET
 
 
 class Settings(BaseModel):
-    authjwt_secret_key: str = "secret"
+    authjwt_secret_key: str = SECRET
+    authjwt_access_token_expires: int = timedelta(minutes=720)
 
 
 @AuthJWT.load_config

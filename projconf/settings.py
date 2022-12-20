@@ -19,3 +19,6 @@ PORT = int(os.getenv("PORT"))
 
 # Card storage settings
 StoragePath = os.getenv("STORAGE_PATH")
+
+# Secret key for auth jwt
+SECRET = os.getenv("SECRET")
