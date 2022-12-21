@@ -2,9 +2,11 @@ import uvicorn
 
 from apps import (
     create_card_controller,
+    get_all_card_controller,
     get_card_controller,
     login_controller,
     sign_up_controller,
+    update_card_controller,
     user_delete_controller,
     user_update_controller,
 )

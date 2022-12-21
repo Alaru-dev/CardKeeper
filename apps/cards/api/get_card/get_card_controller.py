@@ -1,36 +1,36 @@
-from fastapi import Depends, File, HTTPException, status
+from fastapi import Depends, HTTPException, status
 from fastapi.responses import FileResponse
 
 from apps.auth.api.security_settings import AuthJWT
-from apps.db import async_session
-from apps.projconf import app
+from apps.db_models import Card
+from apps.utils.db_specify import async_session
+from apps.utils.http_errors import ErrorResponse
+from projconf import app
 
-from ...db_card_func import db_get_card
-from ...db_models import Card
-from .get_card_request import GetCardRequest
+from ...db_card_func import db_get_card_by_id
+from ..req_res_models import GetCardRequest
 
 
-@app.get("/{user_id}/get_card/{card_name}")
-async def get_card_controller(
-    user_id: int, card_name: str, Authorize: AuthJWT = Depends()
-):
+@app.get("/api/v1/get_card/{card_id}")
+async def get_card_controller(card_id: int, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
+    current_user_id = Authorize.get_jwt_subject()
     async with async_session() as session, session.begin():
-        current_card: Card = await db_get_card(
+        current_card: Card = await db_get_card_by_id(
             session,
             Card,
-            user_id,
-            card_name,
+            current_user_id,
+            card_id,
         )
-        card_full_name = get_file_name(current_card.card_path)
         if current_card:
-            # with open(current_card.card_path, "rb") as file_object:
+            card_full_name = get_file_name(current_card.card_path)
             return FileResponse(
                 current_card.card_path, filename=card_full_name
             )
         else:
             raise HTTPException(
-                status.HTTP_404_NOT_FOUND, detail="Card don`t exist"
+                ErrorResponse.CARD_NOT_EXIST.status_code,
+                ErrorResponse.CARD_NOT_EXIST.detail,
             )
 
 
