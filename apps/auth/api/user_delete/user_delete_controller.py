@@ -1,24 +1,25 @@
 import os
 import shutil
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 
-from apps.auth.api.security_settings import AuthJWT, verify_password
-from apps.db import async_session
-from apps.db.card_storage_settings import StoragePath
-from apps.projconf import app
+from apps.auth.api.security_settings import AuthJWT
+from apps.db_models import User
+from apps.utils.db_specify import async_session
+from projconf import StoragePath, app
 
-from ...db_auth_func import db_delete_user, db_get_user
-from ...db_models import User
-from .user_delete_request import UserDeleteRequest
+from ...db_auth_func import db_delete_user
+from ..req_res_models import UserDeleteRequest, UserDeleteResponse
 
 
-@app.delete("/{user_id}/user_delete")
-async def user_delete_controller(
-    user_id, user: UserDeleteRequest, Authorize: AuthJWT = Depends()
-):
+@app.delete("/api/v1/user_delete", response_model=UserDeleteResponse)
+async def user_delete_controller(Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
+    current_user_id = Authorize.get_jwt_subject()
     async with async_session() as session, session.begin():
-        deleted_user = await db_delete_user(session, User, user)
-        shutil.rmtree(os.path.join(StoragePath, str(user_id)))
-        return {"Info": "Deleted", "name": user.username}
+        deleted_user = await db_delete_user(session, User, current_user_id)
+        if os.path.isdir(os.path.join(StoragePath, str(current_user_id))):
+            shutil.rmtree(os.path.join(StoragePath, str(current_user_id)))
+        return UserDeleteResponse(
+            id=deleted_user.id, username=deleted_user.username
+        )

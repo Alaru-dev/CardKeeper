@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from apps.projconf.proj_description import description
+from projconf.proj_description import description
 
 app = FastAPI(
     title="CardKeeperApi",
@@ -8,7 +8,6 @@ app = FastAPI(
     version="1.0.0",
     contact={
         "name": "Alaru",
-        # "url": "http://x-force.example.com/contact/",
         "email": "pobrom@gamil.com",
     },
 )
