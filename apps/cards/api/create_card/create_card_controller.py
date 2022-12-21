@@ -28,6 +28,7 @@ async def create_card_controller(
         check_is_card_exist = await db_get_card_by_name(
             session, Card, current_user_id, new_card.card_name
         )
+        print(check_is_card_exist)
         if check_is_card_exist:
             raise HTTPException(
                 ErrorResponse.CARD_NAME_NOT_UNIQ.status_code,

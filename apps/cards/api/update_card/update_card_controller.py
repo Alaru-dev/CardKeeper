@@ -17,7 +17,7 @@ from ...db_card_func import (  # isort:skip
 )
 
 
-@app.post("/api/v1/update_card/{card_id}", response_model=CardOut)
+@app.put("/api/v1/update_card/{card_id}", response_model=CardOut)
 async def update_card_controller(
     card_id: int,
     update_card: UpdateCardRequest,

@@ -60,10 +60,9 @@ async def db_update_card(session, card_table, user_id, card):
     return updated_user
 
 
-#
-#
-# async def db_delete_card(session, card_table, user):
-#     current_user = await session.scalar(select(card_table).where(card_table.username == user.username))
-#     created_user = await session.delete(current_user)
-#     return created_user
-#
+async def db_delete_card(session, card_table, user_id, card_id):
+    current_card = await db_get_card_by_id(
+        session, card_table, user_id, card_id
+    )
+    await session.delete(current_card)
+    return current_card

@@ -13,9 +13,7 @@ from ..req_res_models import UserDeleteRequest, UserDeleteResponse
 
 
 @app.delete("/api/v1/user_delete", response_model=UserDeleteResponse)
-async def user_delete_controller(
-    user: UserDeleteRequest, Authorize: AuthJWT = Depends()
-):
+async def user_delete_controller(Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     current_user_id = Authorize.get_jwt_subject()
     async with async_session() as session, session.begin():
