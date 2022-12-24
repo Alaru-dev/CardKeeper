@@ -7,6 +7,7 @@ from apps.db_models import Card
 from apps.utils.db_specify import async_session
 from apps.utils.http_errors import ErrorResponse
 from projconf import app
+from projconf.end_points import CardsEndPoints
 
 from ..req_res_models import CardOut, UpdateCardRequest
 
@@ -17,7 +18,7 @@ from ...db_card_func import (  # isort:skip
 )
 
 
-@app.put("/api/v1/update_card/{card_id}", response_model=CardOut)
+@app.put(CardsEndPoints.UpdateCard, response_model=CardOut)
 async def update_card_controller(
     card_id: int,
     update_card: UpdateCardRequest,
@@ -36,7 +37,7 @@ async def update_card_controller(
         ):
             raise HTTPException(
                 ErrorResponse.NOTHING_TO_CHANGE.status_code,
-                detail=ErrorResponse.NOTHING_TO_CHANGE.detail,
+                ErrorResponse.NOTHING_TO_CHANGE.detail,
             )
         if update_card.new_card_name:
             check_new_card_name_is_unique = await db_get_card_by_name(
@@ -45,7 +46,7 @@ async def update_card_controller(
             if check_new_card_name_is_unique:
                 raise HTTPException(
                     ErrorResponse.CARD_NAME_NOT_UNIQ.status_code,
-                    detail=ErrorResponse.CARD_NAME_NOT_UNIQ.detail,
+                    ErrorResponse.CARD_NAME_NOT_UNIQ.detail,
                 )
             new_card_path = add_new_file_name_to_path(
                 current_card.card_path, update_card.new_card_name

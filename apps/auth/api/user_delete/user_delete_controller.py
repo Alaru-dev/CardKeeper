@@ -7,12 +7,13 @@ from apps.auth.api.security_settings import AuthJWT
 from apps.db_models import User
 from apps.utils.db_specify import async_session
 from projconf import StoragePath, app
+from projconf.end_points import UsersEndPoints
 
 from ...db_auth_func import db_delete_user
-from ..req_res_models import UserDeleteRequest, UserDeleteResponse
+from ..req_res_models import UserDeleteResponse
 
 
-@app.delete("/api/v1/user_delete", response_model=UserDeleteResponse)
+@app.delete(UsersEndPoints.Delete, response_model=UserDeleteResponse)
 async def user_delete_controller(Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     current_user_id = Authorize.get_jwt_subject()
