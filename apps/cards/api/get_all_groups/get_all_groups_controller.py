@@ -5,12 +5,12 @@ from apps.db_models import Card
 from apps.utils.db_specify import async_session
 from apps.utils.http_errors import ErrorResponse
 from projconf import app
+from projconf.end_points import CardsEndPoints
 
 from ...db_card_func import db_get_all_card
-from ..req_res_models import CardOut, CardsOut
 
 
-@app.get("/api/v1/get_all_groups")
+@app.get(CardsEndPoints.GetAllGroup)
 async def get_all_groups_controller(Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     current_user_id = Authorize.get_jwt_subject()
@@ -19,10 +19,11 @@ async def get_all_groups_controller(Authorize: AuthJWT = Depends()):
         if group_massive:
             groups = {}
             for el in group_massive.all():
-                groups.update({el.group: el.card_name})
+                # groups.add(el.group)
+                groups[el.group].append(el.card_name)
             return groups
         else:
             raise HTTPException(
                 ErrorResponse.USER_HAVE_NOT_CARDS.status_code,
-                detail=ErrorResponse.USER_HAVE_NOT_CARDS.detail,
+                ErrorResponse.USER_HAVE_NOT_CARDS.detail,
             )

@@ -1,19 +1,20 @@
 import json
 import os
 
-from fastapi import Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import Depends, File, Form, HTTPException, UploadFile
 
 from apps.auth.api.security_settings import AuthJWT
 from apps.db_models import Card
 from apps.utils.db_specify import async_session
 from apps.utils.http_errors import ErrorResponse
 from projconf import StoragePath, app
+from projconf.end_points import CardsEndPoints
 
 from ...db_card_func import db_add_card, db_get_card_by_name
 from ..req_res_models import CardOut, CreateCardRequest
 
 
-@app.post("/api/v1/create_card", response_model=CardOut)
+@app.post(CardsEndPoints.CreateCard, response_model=CardOut)
 async def create_card_controller(
     image: UploadFile = File(),
     data=Form(
@@ -28,7 +29,6 @@ async def create_card_controller(
         check_is_card_exist = await db_get_card_by_name(
             session, Card, current_user_id, new_card.card_name
         )
-        print(check_is_card_exist)
         if check_is_card_exist:
             raise HTTPException(
                 ErrorResponse.CARD_NAME_NOT_UNIQ.status_code,

@@ -5,13 +5,16 @@ from apps.db_models import User
 from apps.utils.db_specify import async_session
 from apps.utils.http_errors import ErrorResponse
 from projconf.application import app
+from projconf.end_points import UsersEndPoints
 
 from ...db_auth_func import db_get_user_by_name
 from ..req_res_models import LoginRequest, LoginResponse
 
 
 @app.post(
-    "/api/v1/login", operation_id="authorize", response_model=LoginResponse
+    UsersEndPoints.Login,
+    operation_id="authorize",
+    response_model=LoginResponse,
 )
 async def login_controller(user: LoginRequest, Authorize: AuthJWT = Depends()):
     async with async_session() as session, session.begin():
@@ -27,10 +30,10 @@ async def login_controller(user: LoginRequest, Authorize: AuthJWT = Depends()):
                     token=access_token,
                 )
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=ErrorResponse.BAD_PASSWORD.detail,
+                ErrorResponse.BAD_PASSWORD.status_code,
+                ErrorResponse.BAD_PASSWORD.detail,
             )
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=ErrorResponse.BAD_USERNAME.detail,
+            ErrorResponse.BAD_USERNAME.status_code,
+            ErrorResponse.BAD_USERNAME.detail,
         )

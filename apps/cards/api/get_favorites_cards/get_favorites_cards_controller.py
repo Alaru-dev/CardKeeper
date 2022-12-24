@@ -5,12 +5,13 @@ from apps.db_models import Card
 from apps.utils.db_specify import async_session
 from apps.utils.http_errors import ErrorResponse
 from projconf import app
+from projconf.end_points import CardsEndPoints
 
 from ...db_card_func import db_get_all_card
 from ..req_res_models import CardOut, CardsOut
 
 
-@app.get("/api/v1/get_favorites_cards")
+@app.get(CardsEndPoints.GetFavoritesCard)
 async def get_favorites_cards_controller(Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     current_user_id = Authorize.get_jwt_subject()
@@ -32,5 +33,5 @@ async def get_favorites_cards_controller(Authorize: AuthJWT = Depends()):
         else:
             raise HTTPException(
                 ErrorResponse.USER_HAVE_NOT_CARDS.status_code,
-                detail=ErrorResponse.USER_HAVE_NOT_CARDS.detail,
+                ErrorResponse.USER_HAVE_NOT_CARDS.detail,
             )

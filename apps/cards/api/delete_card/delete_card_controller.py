@@ -13,9 +13,10 @@ from apps.db_models import Card
 from apps.utils.db_specify import async_session
 from apps.utils.http_errors import ErrorResponse
 from projconf import app
+from projconf.end_points import CardsEndPoints
 
 
-@app.delete("/api/v1/delete_card/{card_id}", response_model=CardOut)
+@app.delete(CardsEndPoints.DeleteCard, response_model=CardOut)
 async def delete_card_controller(card_id: int, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     current_user_id = Authorize.get_jwt_subject()
@@ -23,7 +24,6 @@ async def delete_card_controller(card_id: int, Authorize: AuthJWT = Depends()):
         current_card = await db_get_card_by_id(
             session, Card, current_user_id, card_id
         )
-        print(current_card.card_name)
         if current_card:
             deleted_card = await db_delete_card(
                 session, Card, current_user_id, card_id

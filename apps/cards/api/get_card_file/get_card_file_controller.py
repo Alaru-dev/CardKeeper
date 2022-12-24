@@ -6,11 +6,12 @@ from apps.db_models import Card
 from apps.utils.db_specify import async_session
 from apps.utils.http_errors import ErrorResponse
 from projconf import app
+from projconf.end_points import CardsEndPoints
 
 from ...db_card_func import db_get_card_by_id
 
 
-@app.get("/api/v1/get_card_file/{card_id}")
+@app.get(CardsEndPoints.GetCardFile)
 async def get_card_file_controller(
     card_id: int, Authorize: AuthJWT = Depends()
 ):
