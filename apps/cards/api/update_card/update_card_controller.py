@@ -58,7 +58,7 @@ async def update_card_controller(
             )
         if update_card.group:
             current_card.group = update_card.group
-        if update_card.favorites:
+        if update_card.favorites is not None:
             current_card.favorites = update_card.favorites
         updated_card = await db_update_card(
             session, Card, current_user_id, current_card

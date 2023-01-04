@@ -17,10 +17,10 @@ async def get_all_groups_controller(Authorize: AuthJWT = Depends()):
     async with async_session() as session, session.begin():
         group_massive = await db_get_all_card(session, Card, current_user_id)
         if group_massive:
-            groups = {}
+            groups = set()
             for el in group_massive.all():
-                # groups.add(el.group)
-                groups[el.group].append(el.card_name)
+                if el.group:
+                    groups.add(el.group)
             return groups
         else:
             raise HTTPException(
