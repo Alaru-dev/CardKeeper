@@ -18,7 +18,7 @@ from ...db_card_func import (  # isort:skip
 )
 
 
-@app.put(CardsEndPoints.UpdateCard, response_model=CardOut)
+@app.put(CardsEndPoints.UpdateCardInfo, response_model=CardOut)
 async def update_card_controller(
     card_id: int,
     update_card: UpdateCardRequest,
@@ -58,7 +58,7 @@ async def update_card_controller(
             )
         if update_card.group:
             current_card.group = update_card.group
-        if update_card.favorites:
+        if update_card.favorites is not None:
             current_card.favorites = update_card.favorites
         updated_card = await db_update_card(
             session, Card, current_user_id, current_card

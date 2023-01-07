@@ -5,18 +5,18 @@ import dataclasses
 class UsersEndPoints:
     SignUp = "/api/v1/sign_up"
     Login = "/api/v1/login"
-    Delete = "/api/v1/user_delete"
-    Update = "/api/v1/user_update"
+    Delete = "/api/v1/user"
+    Update = "/api/v1/user"
 
 
 @dataclasses.dataclass
 class CardsEndPoints:
-    CreateCard = "/api/v1/create_card"
-    GetAllCard = "/api/v1/get_all_card"
-    DeleteCard = "/api/v1/delete_card/{card_id}"
-    GetAllGroup = "/api/v1/get_all_groups"
-    GetCardFile = "/api/v1/get_card_file/{card_id}"
-    GetCardInfo = "/api/v1/get_card_info/{card_id}"
-    GetFavoritesCard = "/api/v1/get_favorites_cards"
-    GetGroupCards = "/api/v1/get_group_cards/{group}"
-    UpdateCard = "/api/v1/update_card/{card_id}"
+    GetAllCard = "/api/v1/cards/all"
+    GetAllGroup = "/api/v1/cards/groups"
+    GetGroupCards = "/api/v1/cards/{group}"
+    GetFavoritesCard = "/api/v1/cards/favorite"
+    CreateCard = "/api/v1/cards/create"
+    GetCardFile = "/api/v1/cards/{card_id}/file"
+    GetCardInfo = "/api/v1/cards/{card_id}/info"
+    UpdateCardInfo = "/api/v1/cards/{card_id}/info"
+    DeleteCard = "/api/v1/cards/{card_id}"
