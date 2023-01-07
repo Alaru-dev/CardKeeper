@@ -18,7 +18,7 @@ from ...db_card_func import (  # isort:skip
 )
 
 
-@app.put(CardsEndPoints.UpdateCard, response_model=CardOut)
+@app.put(CardsEndPoints.UpdateCardInfo, response_model=CardOut)
 async def update_card_controller(
     card_id: int,
     update_card: UpdateCardRequest,
